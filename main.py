@@ -4,9 +4,9 @@ import datetime
 
 class ScheduleClass:
     """
-    Свойства объекта:
+    Аттрибуты объекта:
         schedule = текущее расписание (Числитель / Знаменатель)
-        current_date = текущая дата с максимальной точностью
+        current_date = текущая дата с точностью до миллисекунд
         current_year = текущий год
         start_date = начало учебного года
         delta = количество месяцев, дней прошедших с начала учебного года до текущего момента
@@ -28,19 +28,42 @@ class ScheduleClass:
 
     def get_weekday(self):
         # Возвращает текущий день недели (1-7)
-        return (self.start_date.weekday() + 1 + self.delta.days) % 7
+        return (self.start_date.weekday() + self.delta.days) % 7 + 1
 
     def is_numerator(self):
         # Возвращает True, если сегодня "числитель"
-        return ((self.start_date.weekday() + 1 + self.delta.days) // 7) % 2 == 0
+        return ((self.start_date.weekday() + self.delta.days) // 7) % 2 == 0
+
+
+def console_decor(schedule):
+    weekday_converter = {
+        1: "Понедельник",
+        2: "Вторник",
+        3: "Среда",
+        4: "Четверг",
+        5: "Пятница",
+        6: "Суббота",
+        7: "Воскресенье"
+    }
+
+    if schedule.get_weekday() in [6, 7]:
+        print(f"---Сегодня Выходной!---")
+        print("Расписание на понедельник пока не реализовано :с")
+        return
+    else:
+        current_weekday = schedule.get_weekday()
+        print(f"---Сегодня {weekday_converter[current_weekday]}---")
+
+    for time, couple in schedule.schedule[schedule.get_weekday()].items():
+        print(time, *couple if couple is not None else 'ПАРЫ НЕТ!')
 
 
 def main():
     schedule = ScheduleClass()
     if not schedule.is_numerator():
         schedule.schedule = denominator()
-    print(schedule.get_weekday())
-    print(schedule.schedule[5])
+
+    console_decor(schedule)
 
 
 if __name__ == '__main__':
