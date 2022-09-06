@@ -13,7 +13,12 @@ class ScheduleClass:
     """
 
     def __init__(self):
-        self.schedule = numerator()
+        def numerator_denominator_init():
+            if ((self.start_date.weekday() + self.delta.days) // 7) % 2 == 0:  # Возвращает True, если сегодня числитель
+                return numerator()
+            else:
+                return denominator()
+
         self.current_date = datetime.now()
         self.year = self.current_date.year
         self.month = self.current_date.month
@@ -23,6 +28,7 @@ class ScheduleClass:
         else:
             self.start_date = datetime(self.year - 1, 9, 1)
         self.delta = self.current_date - self.start_date
+        self.schedule = numerator_denominator_init()
 
     def get_daytime(self):
         # Возвращает текущее дневное время
@@ -32,29 +38,48 @@ class ScheduleClass:
         # Возвращает текущий день недели (1-7)
         return (self.start_date.weekday() + self.delta.days) % 7 + 1
 
-    def is_numerator(self):
-        # Возвращает True, если сегодня "числитель"
-        return ((self.start_date.weekday() + self.delta.days) // 7) % 2 == 0
+    def switch_numerator_denominator(self):
+        if self.schedule is numerator():
+            self.schedule = denominator()
+        else:
+            self.schedule = numerator()
 
 
 def console_decor(schedule):
     weekday_converter = {
-        1: "Понедельник",
-        2: "Вторник",
-        3: "Среда",
-        4: "Четверг",
-        5: "Пятница",
-        6: "Суббота",
-        7: "Воскресенье"
+        "Именительный падеж": {
+            1: "Понедельник",
+            2: "Вторник",
+            3: "Среду",
+            4: "Четверг",
+            5: "Пятницу",
+            6: "Субботу",
+            7: "Воскресенье"
+        },
+        "Родительный падеж": {
+            1: "Понедельник",
+            2: "Вторник",
+            3: "Среду",
+            4: "Четверг",
+            5: "Пятницу",
+            6: "Субботу",
+            7: "Воскресенье"
+        }
     }
 
-    if schedule.get_weekday() in [6, 7]:
-        print(f"---Сегодня Выходной!---")
-        print("Показ расписания на понедельник пока не реализован :с")
-        return
-    else:
-        current_weekday = schedule.get_weekday()
-        print(f"---Сегодня {weekday_converter[current_weekday]}---")
+    current_weekday = schedule.get_weekday()
+
+    print(f"Сегодня {weekday_converter['Родительный падеж'][current_weekday]}")
+
+    def weekend_corrector(day):
+        if day in [6, 7]:
+            print(f"---Сегодня Выходной!---")
+            day = 1
+            schedule.switch_numerator_denominator()
+            print("Расписание на Понедельник!")
+        else:
+            print(f"---Расписание на {weekday_converter['Именительный падеж'][current_weekday]}---")
+        return day
 
     time = schedule.current_date
     # Первая пара
@@ -87,8 +112,11 @@ def console_decor(schedule):
     # После пар
     elif time > datetime(schedule.year, schedule.month, schedule.day, 15, 10, 00):
         print(f"Пары кончились :3")
+        current_weekday += 1
     else:
         print("Error")
+
+    current_weekday = weekend_corrector(current_weekday)
 
     for couple_start_time, couple in schedule.schedule[current_weekday].items():
         print(couple_start_time, *couple if couple is not None else 'ПАРЫ НЕТ!')
@@ -96,9 +124,6 @@ def console_decor(schedule):
 
 def main():
     schedule = ScheduleClass()
-    if not schedule.is_numerator():
-        schedule.schedule = denominator()
-
     console_decor(schedule)
 
 
