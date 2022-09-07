@@ -1,4 +1,5 @@
 from numerator_denominator import numerator, denominator
+from month_converter import month_converter
 from datetime import datetime
 
 
@@ -50,10 +51,10 @@ def console_decor(schedule):
         "Именительный падеж": {
             1: "Понедельник",
             2: "Вторник",
-            3: "Среду",
+            3: "Среда",
             4: "Четверг",
-            5: "Пятницу",
-            6: "Субботу",
+            5: "Пятница",
+            6: "Суббота",
             7: "Воскресенье"
         },
         "Родительный падеж": {
@@ -69,7 +70,7 @@ def console_decor(schedule):
 
     current_weekday = schedule.get_weekday()
 
-    print(f"Сегодня {weekday_converter['Родительный падеж'][current_weekday]}")
+    print(f"Сегодня {weekday_converter['Именительный падеж'][current_weekday]} {schedule.day} {month_converter(schedule.month)}")
 
     def weekend_corrector(day):
         if day in [6, 7]:
@@ -78,7 +79,7 @@ def console_decor(schedule):
             schedule.switch_numerator_denominator()
             print("Расписание на Понедельник!")
         else:
-            print(f"---Расписание на {weekday_converter['Именительный падеж'][current_weekday]}---")
+            print(f"---Расписание на {weekday_converter['Родительный падеж'][current_weekday]}---")
         return day
 
     time = schedule.current_date
@@ -128,4 +129,6 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+	pass
+
+main()
