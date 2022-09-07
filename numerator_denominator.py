@@ -99,10 +99,17 @@ def denominator():
 
 
 def main():
-    numerator()
-    denominator()
-    test = numerator()[2]["9:55"][0]
-    print(test)
+    print("---ЧИСЛИТЕЛЬ---")
+    for key, value in numerator().items():
+        print(key)
+        for time, couple in value.items():
+            print(time, couple)
+
+    print("\n---ЗНАМЕНАТЕЛЬ---")
+    for key, value in denominator().items():
+        print(key)
+        for time, couple in value.items():
+            print(time, couple)
 
 
 if __name__ == '__main__':
