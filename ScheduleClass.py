@@ -22,6 +22,7 @@ class SC:
         self.year = self.current_date.year
         self.month = self.current_date.month
         self.day = self.current_date.day
+        self.time = self.current_date.time()
         if self.current_date >= datetime(self.year, 8, 31):
             self.start_date = datetime(self.year, 9, 1)
         else:
@@ -42,3 +43,7 @@ class SC:
             self.schedule = denominator()
         else:
             self.schedule = numerator()
+
+    def div_time(self, diving_time):
+        hours, minutes, seconds = diving_time.split(':')
+        return self.current_date - datetime(self.year, self.month, self.day, hours, minutes, seconds)
