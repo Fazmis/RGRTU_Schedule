@@ -45,5 +45,8 @@ class SC:
             self.schedule = numerator()
 
     def div_time(self, diving_time):
-        hours, minutes, seconds = diving_time.split(':')
+        if type(diving_time) is list:
+            hours, minutes, seconds = diving_time
+        else:
+            hours, minutes, seconds = diving_time.split(':')
         return self.current_date - datetime(self.year, self.month, self.day, hours, minutes, seconds)
