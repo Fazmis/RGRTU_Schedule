@@ -51,11 +51,11 @@ def event_notification(schedule):
     for key, value in events_time.items():
         hour, minute, second = map(int, key.split(":"))
         event_time = datetime.time(hour, minute, second)
-        if schedule.time > event_time:
+        if schedule.time < event_time:
             time_to_event = schedule.div_time([hour, minute, second])
             break
     else:
-        return "Пары кончились!"
+        return "Пары кончились!", "08:10:00"
 
     return f"{events_time[str(event_time)]} начнётся через: {str(time_to_event)}", str(event_time)
 
@@ -72,16 +72,25 @@ def console_output(schedule):
         print(f"\n---Расписание на {weekday_to_string()['special'][current_weekday]}---")
 
     def classes_decoration():
-        pass
+        for time, lesson in schedule.schedule[current_weekday].items():
+            if event_time == time:
+                print(f">> {time} - ", end="")
+                print(*[item for item in lesson if lesson is not None], sep=", ")
+            else:
+                print(f"{time} - ", end="")
+                print(*[item for item in lesson if lesson is not None], sep=", ")
 
     current_weekday = schedule.get_weekday()
     time_to_event, event_time = event_notification(schedule)
     output_header()
     print(time_to_event)
+    if time_to_event == "Пары кончились!":
+        current_weekday += 1
     if current_weekday in [6, 7]:
         weekend_decoration()
     else:
         weekday_decoration()
+    classes_decoration()
 
 
 def main():
