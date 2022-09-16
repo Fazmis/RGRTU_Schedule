@@ -1,7 +1,7 @@
 from converters import month_to_string, weekday_to_string
 import datetime
+import tkinter
 # import os
-from pygame.time import Clock
 import ScheduleClass
 
 
@@ -93,14 +93,21 @@ def console_output(schedule):
     classes_decoration()
 
 
+def label_one(lbl, x):
+    lbl.configure(text=x)
+
+
 def main():
-    schedule = ScheduleClass.SC()
-    console_output(schedule)
+    root = tkinter.Tk()
+    root.title("РГРТУ 2415 1 курс")
+    root.geometry(f"{640}x{480}")
+    lbl = tkinter.Label(root, text=0)
+    lbl.grid()
+    console_output(schedule=ScheduleClass.SC())
+    label_one(lbl, x)
+    root.mainloop()
 
 
 if __name__ == '__main__':
-    while True:
-        print("\n"*30)
-        main()
-        # os.system('cls')
-        Clock().tick(1)
+    x = 0
+    main()
